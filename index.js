@@ -232,6 +232,13 @@ async function run() {
       res.send(result);
     });
 
+    // get popular 6 instructor
+    app.get("/popularinstructors", async (req, res) => {
+      const query = { role: "instructor" };
+      const result = await userCollection.find(query).limit(6).toArray();
+      res.send(result);
+    });
+
     app.delete("/selected/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -330,11 +337,31 @@ async function run() {
       const removeClass = await selectedCollection.deleteOne(query);
       res.send({ insertResult, removeClass });
     });
-
+    // get all payment
+    app.get("/allpayment", verifyJWT, async (req, res) => {
+      const { date } = req.body;
+      const result = await paymentCollection
+        .find()
+        .sort({ date: -1 })
+        .toArray();
+      res.send(result);
+    });
+    // get user spesic payment
     app.get("/payment", verifyJWT, async (req, res) => {
       const { date } = req.body;
       const email = req.query.email;
       const filter = { email: email };
+      const result = await paymentCollection
+        .find(filter)
+        .sort({ date: -1 })
+        .toArray();
+      res.send(result);
+    });
+    // get nstructor spesific payment(optional)
+    app.get("/instructorpayment", verifyJWT, async (req, res) => {
+      const { date } = req.body;
+      const name = req.query.name;
+      const filter = { instructorName: name };
       const result = await paymentCollection
         .find(filter)
         .sort({ date: -1 })
