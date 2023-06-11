@@ -346,7 +346,6 @@ async function run() {
     app.put("/updateClass/:id", async (req, res) => {
       const id = req.params.id;
       const { availableSeats, enrolled } = req.body;
-      console.log(availableSeats, id);
       const filter = { _id: new ObjectId(id) };
       const updateDoc = {
         $set: {
