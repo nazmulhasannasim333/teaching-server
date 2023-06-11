@@ -225,6 +225,41 @@ async function run() {
       res.send(result);
     });
 
+    // get user by using id
+    app.get("/getprofileinfo/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await userCollection.findOne(query);
+      res.send(result);
+    });
+
+    // get only a user
+    app.get("/userprofile/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await userCollection.findOne(query);
+      res.send(result);
+    });
+    // update user profile
+    app.put("/updateprofile/:id", async (req, res) => {
+      const user = req.body;
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updateUser = {
+        $set: {
+          address: user.address,
+          email: user.email,
+          gender: user.gender,
+          name: user.name,
+          phone: user.phone,
+          photo: user.photo,
+          website: user.website,
+        },
+      };
+      const result = await userCollection.updateOne(filter, updateUser);
+      res.send(result);
+    });
+
     // get only instructors
     app.get("/instructors", async (req, res) => {
       const query = { role: "instructor" };
