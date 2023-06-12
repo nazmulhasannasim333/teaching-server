@@ -405,7 +405,7 @@ async function run() {
       res.send(result);
     });
 
-    // update available seat and enrolled
+    // update available seat and enrolled.
     app.put("/updateClass/:id", async (req, res) => {
       const id = req.params.id;
       const { availableSeats, enrolled } = req.body;
